@@ -4,7 +4,7 @@
 # 编写时间:2022/3/24 22:10
 from train import device
 from data_preparation import lengths, targets
-from train import x, y, dataset_features # 为了保持原始数据相同
+from train import x, y, dataset_features,test_features # 为了保持原始数据相同
 from GRU import GRU
 from LSTM import LSTM
 

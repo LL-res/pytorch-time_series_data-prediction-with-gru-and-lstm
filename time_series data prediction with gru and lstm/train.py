@@ -1,4 +1,4 @@
-'''train完整模块'''
+"""train完整模块"""
 
 # 用户：Ejemplarr
 # 编写时间:2022/3/24 22:10
@@ -11,7 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 from GRU import GRU
 from LSTM import LSTM
 from data_preparation import data_start,data_prediction_to_f_and_t,dataset_to_Dataset,dataset_split_4sets,lengths,targets
-
+from my_module import my_print
 '''
    数据的导入
    可调优数据的定义
@@ -26,7 +26,7 @@ from data_preparation import data_start,data_prediction_to_f_and_t,dataset_to_Da
 BATCH_SIZE = 16
 EPOCH = 10
 LEARN_RATE = 1e-3
-
+my_print(BATCH_SIZE)
 
 # 数据的导入
 x, y = data_start()
@@ -40,8 +40,8 @@ train_set_iter = DataLoader(dataset=train_set,# 将数据封装进Dataloader类
                             drop_last=True)# drop_last = True表示最后不够一个batch就舍弃那些多余的数据
 
 # gpu的定义
-device = ('cuda'if torch.cuda.is_available else 'cpu')
-
+device = ('cuda'if torch.cuda.is_available() else 'cpu')
+#print(torch.cuda.is_available())
 # 网络的实例化
 net_gru = GRU().to(device)
 net_lstm = LSTM().to(device)
@@ -58,6 +58,9 @@ def train_for_gru(data, device, loss_fuc, net, optim, Epoch):
     for epoch in range(Epoch):
         loss_print = []
         for batch_idx, (x, y) in enumerate(data):
+            # if batch_idx == 500:
+            #     print("x:",x,len(x),x.reshape([BATCH_SIZE, lengths, 1]))
+            #     print("y:",y)
             x = x.reshape([BATCH_SIZE, lengths, 1])
             x = x.to(device)
             # print(y.shape)
@@ -100,11 +103,14 @@ def train_for_lstm(data, device, loss_fuc, net, optim, Epoch):
 
 
 def main():
-    start = time.perf_counter()
+    start_gru = time.perf_counter()
     train_for_gru(train_set_iter, device, loss_fuc, net_gru, optim_gru, EPOCH)
+    end_gru = time.perf_counter()
+    print('gru训练时间为：{:.2f}s'.format(end_gru-start_gru))
+    start = time.perf_counter()
     train_for_lstm(train_set_iter, device, loss_fuc, net_lstm, optim_lstm, EPOCH)
     end = time.perf_counter()
-    print('训练时间为：{:.2f}s'.format(end-start))
+    print('lstm训练时间为：{:.2f}s'.format(end-start))
     #保存模型
     torch.save(net_gru.state_dict(), 'gru.pt')
     torch.save(net_lstm.state_dict(), 'lstm.pt')
