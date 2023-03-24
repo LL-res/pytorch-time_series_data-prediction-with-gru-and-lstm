@@ -25,7 +25,7 @@ def data_start():
     return x, y
 # x : [1,2,3,4....1000]
 # y : sin(0.01x) + 正态误差
-
+# 此刻的y就是传进来的数据
 def data_prediction_to_f_and_t(data, num_features, num_targets):
     '''
     准备数据集的函数
@@ -66,7 +66,7 @@ def dataset_split_4sets(data_features, data_target, ratio=0.8):
     test_features = data_features[split_index:]
     test_target = data_target[split_index:]
     return train_features, train_target, test_features, test_target
-
-x,y = data_prediction_to_f_and_t([1,2,3,4,5,6,7],3,1)
-print(x,"\n",y)
-print(dataset_split_4sets(x,y))
+#print(" i m here")
+# x,y = data_prediction_to_f_and_t([1,2,3,4,5,6,7],3,1)
+# print(x,"\n",y)
+# print(dataset_split_4sets(x,y))

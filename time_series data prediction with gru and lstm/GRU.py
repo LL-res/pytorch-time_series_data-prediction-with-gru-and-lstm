@@ -49,7 +49,7 @@ class GRU(nn.Module):
 
     def forward(self, input):
         output, h_n = self.gru(input, None)  # output:(batch_size, seq_len, hidden_size)，h0可以直接None
-        # print(output.shape)
+        print('output shape',output.shape)
         output = output[:, -1, :]  # output:(batch_size, hidden_size)
         output = self.mlp(output)  # 进过一个多层感知机，也就是全连接层，output:(batch_size, output_size)
         return output
